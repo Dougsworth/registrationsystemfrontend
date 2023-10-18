@@ -1,76 +1,129 @@
-import React, {useState} from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { Container, makeStyles, Paper, Button } from '@mui/material';
+import React, { useState } from "react";
+import Appbar from "../components/Appbar";
+import { Button, Container, Paper, TextField, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Footer from "../components/Footer";
 
-export default function Customer(props) {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const paperStyle={padding: '50px 20px', width:600, margin:"20px auto"}
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastname] = useState('')
-    const [contactNumber, setContactNumber] = useState('')
-    const [submitted, setSubmitted] = useState(false)
+function Customer() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastname] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const customer = { firstName, lastName, contactNumber };
 
-    const data = location.state?.data;
-    const registeredCourses = data;
-    const customer = {firstName,lastName,contactNumber,registeredCourses};
-
-    console.log(data)
-    const register = (e)=>{
-        e.preventDefault()
-        console.log(customer)
-        fetch("http://localhost:8080/customer/add",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(customer)
-        }).then(()=>{
-            console.log("New Customer registered")
-            console.log(submitted)
-            setSubmitted(true)
-            console.log(submitted)
-        })
-    }
-    
   return (
-    <div>
-    <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
+    <div
+      className="App"
+      style={{ backgroundColor: "#f4f4f4", minHeight: "100vh" }}
     >
-        <Container>
-            <Paper elevation={3} style={paperStyle}>
-                <h1>Register Now!</h1>
-                    <TextField required type={'text'} id="outlined-basic" label="First name" variant="outlined" fullWidth
-                    value={firstName}
-                    onChange={(e)=>setFirstName(e.target.value)}
-                    />
-                    <TextField required type={'text'} id="outlined-basic" label="Last Name" variant="outlined" fullWidth
-                    value={lastName}
-                    onChange={(e)=>setLastname(e.target.value)}
-                    />
-                    <TextField required type={'tel'} id="outlined-basic" label="Contact Number" variant="outlined" fullWidth
-                    value={contactNumber}
-                    onChange={(e)=>setContactNumber(e.target.value)}
-                    />
-                    <TextField id="outlined-read-only-input" label="Course" defaultValue={data} fullWidth
-                    InputProps={{readOnly: true,}}
-                    />
-                    
-                    <Button variant="contained" onClick={register} >Submit</Button>
-                    {submitted && <Link to ='/profile'
-                    state = {{
-                        data: customer
-                    }}
-                > View Profile </Link>}
-            </Paper>
-        </Container>
-    </Box>
+      <Container
+        component="main"
+        maxWidth="md"
+        style={{
+          marginTop: "6%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Paper
+          elevation={5}
+          style={{
+            padding: "50px 60px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            borderRadius: "20px",
+          }}
+        >
+          <Typography
+            component="h1"
+            variant="h4"
+            style={{
+              marginBottom: "25px",
+              fontWeight: "bold",
+              color: "#023047",
+            }}
+          >
+            Register Now!
+          </Typography>
+
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            width="100%"
+            spacing={3}
+          >
+            <TextField
+              variant="filled"
+              margin="normal"
+              required
+              fullWidth
+              id="firstName"
+              label="First Name"
+              name="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              InputProps={{
+                style: { backgroundColor: "whitesmoke", borderRadius: "5px" },
+              }}
+            />
+            <TextField
+              variant="filled"
+              margin="normal"
+              required
+              fullWidth
+              id="lastName"
+              label="Last Name"
+              name="lastName"
+              value={lastName}
+              onChange={(e) => setLastname(e.target.value)}
+              InputProps={{
+                style: { backgroundColor: "whitesmoke", borderRadius: "5px" },
+              }}
+            />
+            <TextField
+              variant="filled"
+              margin="normal"
+              required
+              fullWidth
+              id="contactNumber"
+              label="Contact Number"
+              name="contactNumber"
+              value={contactNumber}
+              onChange={(e) => setContactNumber(e.target.value)}
+              InputProps={{
+                style: { backgroundColor: "whitesmoke", borderRadius: "5px" },
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              style={{
+                margin: "30px 0 20px",
+                padding: "10px 0",
+                borderRadius: "10px",
+                fontSize: "18px",
+                backgroundColor: "#023047",
+                "&:hover": {
+                  backgroundColor: "#219EBC",
+                },
+              }}
+              component={Link}
+              to="/profile"
+              state={{ data: customer }}
+            >
+              Submit
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+      <Footer />
     </div>
   );
 }
+
+export default Customer;
